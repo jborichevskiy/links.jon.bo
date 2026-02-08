@@ -1,0 +1,3 @@
+- render note/quoted text on link cards (currently stored in db but hidden from display)
+- timezone settings
+- wallet.storage?
