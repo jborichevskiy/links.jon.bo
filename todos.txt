@@ -1,3 +1,5 @@
 - render note/quoted text on link cards (currently stored in db but hidden from display)
 - timezone settings
 - wallet.storage?
+- publish to Telegram channel on link add (removed for now, re-enable when ready)
+- fix RSS validation: links without protocol (e.g. "shipmap.org") and self-reference mismatch

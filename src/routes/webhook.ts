@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { config } from "../config";
 import { insertLink, updateLink } from "../db/queries";
 import { fetchMetadata } from "../lib/metadata";
-import { sendMessage, publishToChannel, parseMessage } from "../lib/telegram";
+import { sendMessage, parseMessage } from "../lib/telegram";
 
 const webhook = new Hono();
 
@@ -21,6 +21,9 @@ webhook.post("/webhook/telegram", async (c) => {
   }
 
   const userId = String(message.from?.id);
+  const chatId = String(message.chat.id);
+  console.log(`[telegram] from user_id=${userId} chat_id=${chatId} username=${message.from?.username || "?"} text="${message.text.slice(0, 80)}"`);
+
   if (!config.telegram.allowedUsers.includes(userId)) {
     await sendMessage(message.chat.id, "Sorry, you're not authorized to submit links.");
     return c.json({ ok: true });
@@ -44,19 +47,13 @@ webhook.post("/webhook/telegram", async (c) => {
   });
 
   // Fetch metadata in background and update
-  fetchMetadata(url).then(async (meta) => {
+  fetchMetadata(url).then((meta) => {
     updateLink(link.id, {
       title: meta.title,
       description: meta.description,
       image_url: meta.image_url,
       site_name: meta.site_name,
     });
-
-    // Publish to channel after metadata is fetched
-    const channelMsgId = await publishToChannel(url, note, via);
-    if (channelMsgId) {
-      updateLink(link.id, { telegram_channel_message_id: channelMsgId });
-    }
   });
 
   await sendMessage(message.chat.id, `Saved: ${url}`);

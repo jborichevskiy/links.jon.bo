@@ -5,6 +5,7 @@ import { getDb } from "./db/schema";
 import web from "./routes/web";
 import feed from "./routes/feed";
 import webhook from "./routes/webhook";
+import api from "./routes/api";
 
 // Initialize database on startup
 getDb();
@@ -17,6 +18,7 @@ app.use("*", logger());
 app.route("/", web);
 app.route("/", feed);
 app.route("/", webhook);
+app.route("/", api);
 
 // Health check
 app.get("/health", (c) => c.json({ ok: true }));

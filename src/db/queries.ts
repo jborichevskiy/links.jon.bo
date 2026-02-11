@@ -81,6 +81,35 @@ export function getLinksSince(since: string): Link[] {
     .all(since) as Link[];
 }
 
+export function getAllLinks(): Link[] {
+  const db = getDb();
+  return db
+    .prepare("SELECT * FROM links ORDER BY created_at ASC")
+    .all() as Link[];
+}
+
+export function insertLinkWithTimestamps(link: NewLink & { created_at?: string; published_at?: string }): Link {
+  const db = getDb();
+  const stmt = db.prepare(`
+    INSERT INTO links (url, title, description, image_url, site_name, via, note, source, telegram_message_id, created_at, published_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, COALESCE(?, datetime('now')), COALESCE(?, datetime('now')))
+    RETURNING *
+  `);
+  return stmt.get(
+    link.url,
+    link.title ?? null,
+    link.description ?? null,
+    link.image_url ?? null,
+    link.site_name ?? null,
+    link.via ?? null,
+    link.note ?? null,
+    link.source ?? "import",
+    link.telegram_message_id ?? null,
+    link.created_at ?? null,
+    link.published_at ?? null,
+  ) as Link;
+}
+
 export function getTotalLinks(): number {
   const db = getDb();
   const row = db.prepare("SELECT COUNT(*) as count FROM links").get() as {

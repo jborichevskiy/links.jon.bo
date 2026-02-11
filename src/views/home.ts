@@ -72,6 +72,7 @@ function renderLink(link: Link): string {
       <a class="site" href="${escapeHtml(link.url)}" target="_blank" rel="noopener">${site}</a>
       <span class="via">${viaHtml}</span>
       <span class="date"> &middot; ${date}</span>
+      <a class="edit-link" href="/submit?id=${link.id}" style="display:none;"> &middot; edit</a>
     </div>
   </div>
 </div>`;

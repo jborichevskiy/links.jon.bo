@@ -148,6 +148,12 @@ export function layout(title: string, body: string, path: string = "/"): string 
 
     .link-meta .date { color: #3a3a3e; }
 
+    .link-meta .edit-link {
+      color: #3a3a3e;
+      font-family: Consolas, Monaco, "Andale Mono", monospace;
+    }
+    .link-meta .edit-link:hover { color: #BB4263; }
+
     .link-thumb-placeholder {
       flex-shrink: 0;
       width: 80px;
@@ -193,6 +199,144 @@ export function layout(title: string, body: string, path: string = "/"): string 
     .prose hr { border: none; border-top: 2px solid #2a2a2e; margin: 24px 0; }
     .prose img { max-width: 100%; border-radius: 2px; margin: 12px 0; }
 
+    .submit-link {
+      float: right;
+      font-family: Consolas, Monaco, "Andale Mono", monospace;
+      color: #BB4263 !important;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .submit-link:hover {
+      color: #e0e0e0 !important;
+    }
+
+    .submit-form label {
+      display: block;
+      font-size: 0.85rem;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+      margin-top: 16px;
+    }
+
+    .submit-form input,
+    .submit-form textarea {
+      width: 100%;
+      padding: 10px 12px;
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 2px;
+      color: #d0d0d0;
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .submit-form input:focus,
+    .submit-form textarea:focus {
+      border-color: #BB4263;
+    }
+
+    .submit-form textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .submit-btn {
+      margin-top: 20px;
+      padding: 10px 24px;
+      background: #BB4263;
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      font-family: Consolas, Monaco, "Andale Mono", monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover { background: #d4456f; }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .submit-status {
+      margin-top: 12px;
+      font-size: 0.95rem;
+      min-height: 1.4em;
+    }
+
+    .submit-status.error { color: #e55; }
+    .submit-status.success { color: #5a5; }
+
+    .preview-section {
+      margin-top: 24px;
+      border-top: 1px solid #2a2a2e;
+      padding-top: 20px;
+    }
+
+    .preview-section h3 {
+      font-size: 0.85rem;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .preview-frames {
+      display: flex;
+      gap: 20px;
+    }
+
+    .preview-frame {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .preview-frame-label {
+      font-size: 0.75rem;
+      color: #3a3a3e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .preview-frame iframe {
+      width: 100%;
+      border: 1px solid #2a2a2e;
+      border-radius: 2px;
+      background: #1a1a1c;
+    }
+
+    .secret-page {
+      max-width: 400px;
+      margin: 80px auto;
+      text-align: center;
+    }
+
+    .secret-page input {
+      width: 100%;
+      padding: 10px 12px;
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 2px;
+      color: #d0d0d0;
+      font-family: Consolas, Monaco, "Andale Mono", monospace;
+      font-size: 1rem;
+      text-align: center;
+      outline: none;
+      margin-top: 12px;
+    }
+
+    .secret-page input:focus { border-color: #BB4263; }
+
+    .secret-status {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
     @media (max-width: 1024px) {
       body { font-size: 1rem; }
       .link-title { font-size: 0.95rem; }
@@ -202,6 +346,8 @@ export function layout(title: string, body: string, path: string = "/"): string 
       .link-thumb, .link-thumb-placeholder { width: 56px; height: 56px; }
       .link-thumb-placeholder code { font-size: 1rem; }
       .load-more a { font-size: 0.7rem; }
+      .preview-frames { flex-direction: column; }
+      .submit-link { float: none; margin-left: 0; }
     }
 
   </style>
@@ -213,9 +359,22 @@ export function layout(title: string, body: string, path: string = "/"): string 
       <a href="/feed.xml">RSS</a>
       <a href="/feed.json">JSON</a>
       <a href="/about">ABOUT</a>
+      <a href="/submit" class="submit-link" id="submit-link">+</a>
     </nav>
   </header>
   ${body}
+<script>
+(function() {
+  var el = document.getElementById('submit-link');
+  if (!el) return;
+  var s = localStorage.getItem('links_secret');
+  el.textContent = s ? '+ add' : '+ suggest';
+  if (s) {
+    var edits = document.querySelectorAll('.edit-link');
+    for (var i = 0; i < edits.length; i++) edits[i].style.display = '';
+  }
+})();
+</script>
 </body>
 </html>`;
 }
