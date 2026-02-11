@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { config } from "../config";
 import { fetchMetadata } from "../lib/metadata";
-import { insertLink, updateLink, getLinkById, getAllLinks, insertLinkWithTimestamps } from "../db/queries";
+import { insertLink, updateLink, deleteLink, getLinkById, getAllLinks, insertLinkWithTimestamps } from "../db/queries";
 const api = new Hono();
 
 api.post("/api/preview", async (c) => {
@@ -93,6 +93,23 @@ api.get("/api/links/:id", (c) => {
   if (!link) return c.json({ error: "Not found" }, 404);
 
   return c.json(link);
+});
+
+api.delete("/api/links/:id", (c) => {
+  const authHeader = c.req.header("Authorization");
+  const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+  if (!token || !config.apiKey || token !== config.apiKey) {
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+
+  const id = Number(c.req.param("id"));
+  if (!id) return c.json({ error: "Invalid id" }, 400);
+
+  const link = getLinkById(id);
+  if (!link) return c.json({ error: "Not found" }, 404);
+
+  deleteLink(id);
+  return c.json({ message: "Link deleted", id });
 });
 
 api.put("/api/links/:id", async (c) => {

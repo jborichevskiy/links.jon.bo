@@ -110,6 +110,11 @@ export function insertLinkWithTimestamps(link: NewLink & { created_at?: string; 
   ) as Link;
 }
 
+export function deleteLink(id: number): void {
+  const db = getDb();
+  db.prepare("DELETE FROM links WHERE id = ?").run(id);
+}
+
 export function getTotalLinks(): number {
   const db = getDb();
   const row = db.prepare("SELECT COUNT(*) as count FROM links").get() as {

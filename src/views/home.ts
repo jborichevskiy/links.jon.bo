@@ -73,6 +73,7 @@ function renderLink(link: Link): string {
       <span class="via">${viaHtml}</span>
       <span class="date"> &middot; ${date}</span>
       <a class="edit-link" href="/submit?id=${link.id}" style="display:none;"> &middot; edit</a>
+      <a class="delete-link" href="#" data-id="${link.id}" style="display:none;"> &middot; del</a>
     </div>
   </div>
 </div>`;

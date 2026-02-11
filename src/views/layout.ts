@@ -148,11 +148,13 @@ export function layout(title: string, body: string, path: string = "/"): string 
 
     .link-meta .date { color: #3a3a3e; }
 
-    .link-meta .edit-link {
+    .link-meta .edit-link,
+    .link-meta .delete-link {
       color: #3a3a3e;
       font-family: Consolas, Monaco, "Andale Mono", monospace;
     }
     .link-meta .edit-link:hover { color: #BB4263; }
+    .link-meta .delete-link:hover { color: #e55; }
 
     .link-thumb-placeholder {
       flex-shrink: 0;
@@ -372,6 +374,26 @@ export function layout(title: string, body: string, path: string = "/"): string 
   if (s) {
     var edits = document.querySelectorAll('.edit-link');
     for (var i = 0; i < edits.length; i++) edits[i].style.display = '';
+    var dels = document.querySelectorAll('.delete-link');
+    for (var i = 0; i < dels.length; i++) dels[i].style.display = '';
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest('.delete-link');
+      if (!a) return;
+      e.preventDefault();
+      if (!confirm('Delete this link?')) return;
+      var id = a.dataset.id;
+      fetch('/api/links/' + id, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + s }
+      }).then(function(r) {
+        if (r.ok) {
+          var card = a.closest('.link-card');
+          if (card) card.remove();
+        } else {
+          alert('Failed to delete');
+        }
+      });
+    });
   }
 })();
 </script>
