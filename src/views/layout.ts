@@ -372,7 +372,7 @@ export function layout(title: string, body: string, path: string = "/"): string 
   var el = document.getElementById('submit-link');
   if (!el) return;
   var s = localStorage.getItem('links_secret');
-  el.textContent = s ? '+ add' : '+ suggest';
+  if (s) { el.textContent = '+ add'; } else { el.style.display = 'none'; }
   if (s) {
     var edits = document.querySelectorAll('.edit-link');
     for (var i = 0; i < edits.length; i++) edits[i].style.display = '';
