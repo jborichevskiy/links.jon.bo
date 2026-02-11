@@ -2,8 +2,6 @@ import { Hono } from "hono";
 import { config } from "../config";
 import { fetchMetadata } from "../lib/metadata";
 import { insertLink, updateLink, getLinkById, getAllLinks, insertLinkWithTimestamps } from "../db/queries";
-import { sendMessage } from "../lib/telegram";
-
 const api = new Hono();
 
 api.post("/api/preview", async (c) => {
@@ -83,21 +81,7 @@ api.post("/api/links", async (c) => {
       return c.json({ error: String(err) }, 500);
     }
   } else {
-    if (!config.telegram.allowedUsers.length) {
-      return c.json({ error: "No owner configured to receive suggestions" }, 500);
-    }
-
-    const ownerId = config.telegram.allowedUsers[0];
-    let text = `Link suggestion:\n${url}`;
-    if (body.name) text += `\nFrom: ${body.name}`;
-    if (body.comment) text += `\nComment: ${body.comment}`;
-
-    try {
-      await sendMessage(ownerId, text);
-      return c.json({ message: "Suggestion sent! The owner will review it." });
-    } catch {
-      return c.json({ error: "Failed to send suggestion" }, 500);
-    }
+    return c.json({ error: "Unauthorized" }, 401);
   }
 });
 
