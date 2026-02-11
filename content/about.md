@@ -2,4 +2,4 @@ Inspired by [@krishkhubchand](https://x.com/krishkhubchand)'s [Telegram channel]
 
 Make your own by forking the [repo](https://github.com/jborichevskiy/links.jon.bo), or [message me](https://jon.bo) for help.
 
-Hosted on the [regenhub-compute-1](https://regenhub.xyz).
+Hosted on [regenhub-compute-1](https://regenhub.xyz).
