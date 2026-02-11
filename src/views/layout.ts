@@ -7,6 +7,8 @@ export function layout(title: string, body: string, path: string = "/"): string 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title}</title>
+  <meta name="description" content="good links from around the internet, collected here for you by @jondotbo.">
+  <link rel="icon" href="https://jon.bo/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="${config.baseUrl}/feed.xml">
   <link rel="alternate" type="application/feed+json" title="JSON Feed" href="${config.baseUrl}/feed.json">
   <link rel="preconnect" href="https://rsms.me/">

@@ -123,5 +123,5 @@ document.addEventListener('click', async (e) => {
 });
 </script>`;
 
-  return layout("links.jon.bo", body);
+  return layout("jonbo's links", body);
 }
